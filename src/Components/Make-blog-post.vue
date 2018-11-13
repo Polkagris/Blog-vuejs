@@ -1,37 +1,61 @@
 <template>
-  <b-container >
-    <b-col id="col">
-      <b-row>
-          <h1>{{ title }}</h1>
-      </b-row>
-      <b-row>
-          <h3>Blog title: <input
-            type="text"
-            name=""
-            value=""
-            v-model="blogTitle"></h3>
+  <b-container id="container">
+      <b-col>
+        <form class="" action="index.html" method="post" v-if="!hideBlogMaker">
+        <b-row>
+            <h1 id="title" class="center">{{ title }}</h1>
         </b-row>
-      <b-row>
-          <textarea
-          rows="10"
-          cols="70"
-          placeholder="Write you blog in here..."
-          v-model="blogConentent"></textarea>
+        <b-row>
+            <h3 id="blog-title" class="center">Blog title: <input
+              type="text"
+              name=""
+              value=""
+              v-model.lazy="postObj.blogTitle"></h3>
+          </b-row>
+        <b-row>
+            <textarea
+            class="center"
+            rows="5"
+            cols="50"
+            placeholder="Write you blog in here..."
+            v-model.lazy="postObj.blogContent"></textarea>
+          </b-row>
+        <b-row>
+          <div id="post-category">
+            <label for="">Post Category</label>
+            <select v-model="postObj.category">
+                <option value="Sports">Sports</option>
+                <option value="Food">Food</option>
+                <option value="Climate">Climate</option>
+            </select>
+          </div>
         </b-row>
-      <b-row>
-        <button
-        type="button"
-        name="button"
-        class="btn btn-success"
-        v-on:click="createNewPost(blogTitle)">Create</button>
-        <p v-if="showPost">{{ newPosts }}</p>
-      </b-row>
-    </b-col>
+      </form>
+        <b-row>
+          <div id="innerPost">
+            <h3>Title: {{ postObj.blogTitle }}</h3>
+            <p>Blog content: {{ postObj.blogContent }}</p>
+            <p> Category: {{ postObj.category }} </p>
+            <button
+            type="button"
+            name="button"
+            class="btn btn-info"
+            v-on:click="createBlogPost"
+            v-if="!hideBlogMaker">Create</button>
+            <button
+            class="btn btn-info"
+            type="button"
+            name="button"
+            v-if="hideBlogMaker"
+            v-on:click="showBlogMaker">New Post</button>
+          </div>
+        </b-row>
+      </b-col>
   </b-container>
 </template>
 
 <script>
-// onClick => show post => reset button => onClick=> create new blogPost
+
 export default {
   props: [
     'title'
@@ -39,17 +63,20 @@ export default {
   data () {
     return {
       showPost: false,
-      blogTitle: "",
-      blogConentent: "",
-      newPosts: []
+      postObj: {
+        blogTitle: "",
+        blogContent: "",
+        category: ""
+      },
+      hideBlogMaker: false
     }
   },
   methods: {
-    createNewPost: function(blogTitle){
-      this.showPost = true;
-      this.newPosts.push(blogTitle);
-      console.log(this.newPosts);
-      this.blogTitle = "";
+    createBlogPost: function(){
+      this.hideBlogMaker = true;
+    },
+    showBlogMaker: function(){
+      this.hideBlogMaker = false;
     }
   }
 }
@@ -57,30 +84,43 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 0 auto;
+#container {
+  margin: 0 auto;
+  background-color: #e2e2e2;
 }
+#title{
 
+}
+#blog-title{
+  box-sizing: border-box;
+  width: 100%;
+  padding: 5px;
+}
+.center{
+  margin: 0 auto;
+  text-align: center;
+}
+#post-category{
+  margin: 0 auto;
+  text-align: center;
+}
+#newPost{
+  margin: 0 auto;
+  padding: 50px;
+  text-align: center;
+  font-size: 40px;
+}
+#postContainer{
+}
 h1, h2 {
   font-weight: normal;
   font-size: 50px;
 }
-
-ul {
-  list-style-type: none;
-  padding: 0;
+#innerPost{
+  margin: 20px auto;
+  padding: 10px 150px;
+  background-color: #e5f0f9;
 }
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
 a {
   color: #42b983;
 }
